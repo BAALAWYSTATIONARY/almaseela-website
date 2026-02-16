@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mti wa Familia wa Kirwa - ALMASEELA BAALAWY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .kirwa-tree-section {
+            background-color: #f5f5f5;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .family-tree {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            margin: 1.5rem 0;
+        }
+        
+        .tree-level {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+            border-left: 3px solid #3498db;
+        }
+        
+        .tree-person {
+            background-color: #e8f4f8;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .person-info {
+            flex: 1;
+        }
+        
+        .person-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .person-details {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+        
+        .add-btn {
+            padding: 0.5rem 1rem;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .form-section {
+            background-color: #f0f5fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 2px dashed #3498db;
+        }
+        
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .members-list {
+            margin-top: 2rem;
+        }
+        
+        .member-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-card h4 {
+            color: #2c3e50;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .member-card p {
+            margin: 0.3rem 0;
+            color: #666;
+        }
+        
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .tree-person {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">ALMASEELA BAALAWY</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Nyumbani</a></li>
+                <li><a href="about.html">Kuhusu</a></li>
+                <li><a href="timeline.html">Ratiba</a></li>
+                <li><a href="genealogy.html">Nasaba</a></li>
+                <li><a href="kirwa-genealogy.html" class="active">Mti wa Kirwa</a></li>
+                <li><a href="contact.html">Wasiliana</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Mti wa Familia wa Kirwa</h1>
+                <p>Nasaba Kamili ya Watu wa Kirwa</p>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container">
+                
+                <div class="kirwa-tree-section">
+                    <h2>📜 Nasaba Kamili ya Familia ya Kirwa</h2>
+                    <p>
+                        Familia ya Kirwa ni mojawapo ya makao manne makuu ya AL-MASEELAH BAALAWY katika Kisiwa cha Pemba. 
+                        Wao ni wanaozaliwa wa Yussuf bin Eidarus bin Sultan Alawy, aliyehamia Pemba wakati wa karne ya 10 AH 
+                        (takriban 1046 AH jakadini).
+                    </p>
+
+                    <!-- Main Family Tree -->
+                    <div class="family-tree">
+                        <h3>🌳 Mtembezi wa Msingi wa Nasaba</h3>
+                        
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyidina Ali bin Abi-Talib (KW)</div>
+                                    <div class="person-details">Msasisaji wa nasaba ya Bani Alawy • Mnaanani na rafiki wa Mtume Muhammad</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Imam Hussein (RA)</div>
+                                    <div class="person-details">Mjukuu wa Mtume Muhammad • Shahada (Mjumbe) wa Karbala</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Imam Ali Zein Al-Abidin (37-93 AH)</div>
+                                    <div class="person-details">Alikuja kufahamika kwa imani na ibada ya ruhani • Mwanafunzi wa kufundisha</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Al-Faqih Muqaddam Muhammad bin Ali (574-653 AH)</div>
+                                    <div class="person-details">Mwanafunzi Mkuu Sana • Alianzisha njia ya kidini (Tarika) • Baba wa Tarym</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyid Alawy bin Muhammad (w. 512 AH)</div>
+                                    <div class="person-details">Kuimarisha anayakiwamishaji wa familia</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyid Ali (Khali Qassam) (w. 529 AH)</div>
+                                    <div class="person-details">Alianzisha eneo la Qassam • Ajenga msikiti wa kwanza</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyid Alawy bin Ubaydillah (w. 400 AH)</div>
+                                    <div class="person-details">Msasisaji wa nasaba ya "Bani Alawy" kwa jumla</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyid Abubakar bin Ali bin Abubakar Al-Maseelah</div>
+                                    <div class="person-details">Msasisaji wa kwanza katika Kisiwa cha Pemba • Alianzisha AL-MASEELAH BAALAWY</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #3498db; font-weight: bold; font-size: 1.5rem; margin: 1rem 0;">↓</div>
+
+                        <div class="tree-level">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">Sayyid Sultan Alawy bin Abubakar</div>
+                                    <div class="person-details">Kizazi cha kwanza katika Pemba • Alikuwa na wanawe wawili: Yussuf na Eidarus</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; color: #667eea; font-weight: bold; font-size: 1.3rem; margin: 1rem 0; background-color: #f0f5fa; padding: 1rem; border-radius: 5px;">⬇️ TAWI LA KIRWA (Yussuf bin Eidarus) ⬇️</div>
+
+                        <div class="tree-level" style="background-color: #fff3cd; padding: 1.5rem; border-left: 5px solid #ffc107; border-radius: 5px;">
+                            <div class="tree-person" style="background-color: #fffacd; border-left: 4px solid #ffc107;">
+                                <div class="person-info">
+                                    <div class="person-name" style="color: #856404;">Sayyid Eidarus bin Sultan Alawy</div>
+                                    <div class="person-details">Baba wa Kirwa na makao mengine</div>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; color: #ffc107; font-weight: bold; margin: 1rem 0;">↓</div>
+
+                            <div class="tree-person" style="background-color: #fff3cd; border-left: 4px solid #ffc107; margin-top: 1rem;">
+                                <div class="person-info">
+                                    <div class="person-name" style="color: #856404;">Sayyid Yussuf bin Eidarus</div>
+                                    <div class="person-details">Msasisaji mkuu wa makao ya Kirwa (Kirwa 1, 2, 3, 4) • Alikuwa na watoto 9</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 style="color: #2c3e50; margin-top: 2rem;">Watoto wa Yussuf bin Eidarus (Wanawe 9):</h3>
+                        
+                        <div class="tree-level" style="margin-top: 1rem;">
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">1. Sayyid Omar (N)</div>
+                                    <div class="person-details">Hakuna wanawe wanamume katika rekodi za kihistoria</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">2. Sayyid Ali (Baba wa Kirwa 3 & 4)</div>
+                                    <div class="person-details">Alianzisha makao ya Kirwa 3 na 4</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">3. Sayyid Sheikh (N)</div>
+                                    <div class="person-details">Hakuna wanawe wanamume katika rekodi za kihistoria</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">4. Sayyid Eidarus (N)</div>
+                                    <div class="person-details">No male descendants in historical records</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">5. Sayyid Said (Father of Kirwa 2)</div>
+                                    <div class="person-details">Founded Kirwa settlement 2</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">6. Sayyid Ahmad</div>
+                                    <div class="person-details">Contributed to family leadership</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">7. Sayyid Abrahman (SR - Senior)</div>
+                                    <div class="person-details">Eldest among this set • Father of Kirwa 1</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">8. Sayyid Salim</div>
+                                    <div class="person-details">Family contributor</div>
+                                </div>
+                            </div>
+
+                            <div class="tree-person">
+                                <div class="person-info">
+                                    <div class="person-name">9. Sayyid Abrahman (JR - Junior)</div>
+                                    <div class="person-details">Younger brother • Family supporter</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background-color: #e8f4f8; padding: 1.5rem; border-radius: 5px; margin-top: 2rem;">
+                            <h4>Four Main Kirwa Settlements in Pemba:</h4>
+                            <ul class="values-list">
+                                <li><strong>Kirwa 1:</strong> Founded by Sayyid Abrahman (SR)</li>
+                                <li><strong>Kirwa 2:</strong> Founded by Sayyid Said</li>
+                                <li><strong>Kirwa 3:</strong> Founded by Sayyid Ali</li>
+                                <li><strong>Kirwa 4:</strong> Founded by Sayyid Ali</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Family Member Form -->
+                <div class="kirwa-tree-section">
+                    <h2>➕ Ongeza Mtu Mpya katika Familia</h2>
+                    <p>Tusaidie kupanua na kumalizia rekodi za familia ya Kirwa. Ongeza habari kuhusu wajumbe wa familia yako.</p>
+
+                    <div class="form-section">
+                        <h3>📝 Fomu ya Maelezo ya Mtu wa Familia</h3>
+                        <div class="success-message" id="successMessage">
+                            ✓ Mtu wa familia ameongezwa kwa mafanikio! 🎉
+                        </div>
+                        
+                        <form id="familyMemberForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="memberName">Jina Kamili (Kiarabu/Kiswahili)</label>
+                                    <input type="text" id="memberName" name="memberName" placeholder="Sayyid/Sayyida..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="relationshipType">Aina ya Uhusiano</label>
+                                    <select id="relationshipType" name="relationshipType" required>
+                                        <option value="">-- Chagua --</option>
+                                        <option value="Son">Mtoto wa kiume</option>
+                                        <option value="Daughter">Mtoto wa kike</option>
+                                        <option value="Grandson">Mjukuu (kiume)</option>
+                                        <option value="Granddaughter">Mjukuu (kike)</option>
+                                        <option value="Father">Baba</option>
+                                        <option value="Mother">Mama</option>
+                                        <option value="Brother">Kaka/Mdogo (kiume)</option>
+                                        <option value="Sister">Dada</option>
+                                        <option value="Cousin">Mnaanani</option>
+                                        <option value="Other">Nyingine</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="parentName">Jina la Wazazi (ikiwa inahusu)</label>
+                                    <input type="text" id="parentName" name="parentName" placeholder="Jina la Baba/Mama">
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthYear">Mwaka wa Kuzaliwa (AH au AD)</label>
+                                    <input type="text" id="birthYear" name="birthYear" placeholder="Kwa mfano, 1350 AH au 1930 AD">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="birthLocation">Mahali pa Kuzaliwa</label>
+                                    <input type="text" id="birthLocation" name="birthLocation" placeholder="Jiji/Eneo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="currentLocation">Mahali Halisi</label>
+                                    <input type="text" id="currentLocation" name="currentLocation" placeholder="Nchi/Jiji">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="occupation">Kazi/Cheo</label>
+                                    <input type="text" id="occupation" name="occupation" placeholder="Mwanafunzi, Mwalimu, Mfanyabiashara, nk.">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Barua Pepe ya Kuwasiliana (Hiyari)</label>
+                                    <input type="email" id="contactEmail" name="contactEmail" placeholder="barua.pepe@mfano.com">
+                                </div>
+                            </div>
+
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="additionalInfo">Habari Nyingine / Vidokezo</label>
+                                    <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Habari nyingine yoyote mahususi kuhusu mtu huyu wa familia..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="button-group">
+                                <button type="submit" class="btn-primary">✓ Ongeza katika Mti wa Familia wa Kirwa</button>
+                                <button type="reset" class="btn-secondary">🔄 Safisha Fomu</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Display Added Members -->
+                    <div class="members-list" id="membersList">
+                        <h3>Wajumbe wa Familia Walioongezwa:</h3>
+                        <div id="membersContainer">
+                            <p style="color: #999; font-style: italic;">Hakuna wajumbe wa familia walioongezwa bado. Kuwa wa kwanza kuongeza! 👇</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Note -->
+                <div style="background-color: #fff3cd; border-left: 5px solid #ffc107; padding: 1.5rem; border-radius: 5px; margin-top: 2rem;">
+                    <h3 style="color: #856404; margin-top: 0;">� Vidokezo Muhimu</h3>
+                    <ul style="color: #856404; margin: 1rem 0;">
+                        <li>Tafadhali toa habari sahihi za genealogia iwezekanavyo</li>
+                        <li>Jaza majina yote ya Kiarabu na Kiswahili kwa uwazi</li>
+                        <li>Jaza miezi yote ya AH (Kalenzi ya Kiislamu) na AD (Kalenzi ya Gregoriani) ikiwa inajulikana</li>
+                        <li>Rekodi za familia zitasaidia vizazi vijavyo kufahamu urithi wao</li>
+                        <li>Habari ya kuwasiliana ni hiyari na itahifadhiwa kwa siri</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ALMASEELA BAALAWY. Haki zote zimehifadhiwa.</p>
+            <p>Hifadhi Urithi Wetu kwa Vizazi vya Kesho</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load members from localStorage
+        function loadMembers() {
+            const members = JSON.parse(localStorage.getItem('kirwaMembers')) || [];
+            const container = document.getElementById('membersContainer');
+            
+            if (members.length === 0) {
+                container.innerHTML = '<p style="color: #999; font-style: italic;">Hakuna wajumbe wa familia walioongezwa bado. Kuwa wa kwanza kuongeza! 👇</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            members.forEach((member, index) => {
+                const memberCard = document.createElement('div');
+                memberCard.className = 'member-card';
+                memberCard.innerHTML = `
+                    <h4>👤 ${member.memberName}</h4>
+                    <p><strong>Uhusiano:</strong> ${member.relationshipType}</p>
+                    ${member.parentName ? `<p><strong>Mzazi:</strong> ${member.parentName}</p>` : ''}
+                    ${member.birthYear ? `<p><strong>Mwaka wa Kuzaliwa:</strong> ${member.birthYear}</p>` : ''}
+                    ${member.birthLocation ? `<p><strong>Kuzaliwa:</strong> ${member.birthLocation}</p>` : ''}
+                    ${member.currentLocation ? `<p><strong>Mahali Halisi:</strong> ${member.currentLocation}</p>` : ''}
+                    ${member.occupation ? `<p><strong>Kazi:</strong> ${member.occupation}</p>` : ''}
+                    ${member.additionalInfo ? `<p><strong>Vidokezo:</strong> ${member.additionalInfo}</p>` : ''}
+                    <button class="remove-btn" onclick="removeMembers(${index})">Ondoa</button>
+                `;
+                container.appendChild(memberCard);
+            });
+        }
+
+        // Add new member
+        document.getElementById('familyMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const newMember = {
+                memberName: document.getElementById('memberName').value,
+                relationshipType: document.getElementById('relationshipType').value,
+                parentName: document.getElementById('parentName').value,
+                birthYear: document.getElementById('birthYear').value,
+                birthLocation: document.getElementById('birthLocation').value,
+                currentLocation: document.getElementById('currentLocation').value,
+                occupation: document.getElementById('occupation').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                additionalInfo: document.getElementById('additionalInfo').value,
+                dateAdded: new Date().toLocaleDateString()
+            };
+
+            // Get existing members
+            let members = JSON.parse(localStorage.getItem('kirwaMembers')) || [];
+            members.push(newMember);
+
+            // Save to localStorage
+            localStorage.setItem('kirwaMembers', JSON.stringify(members));
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Reset form
+            this.reset();
+
+            // Reload members display
+            loadMembers();
+
+            // Scroll to members list
+            document.getElementById('membersList').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Remove member
+        function removeMembers(index) {
+            if (confirm('Je, una hakika unataka kuondoa mtu huyu wa familia?')) {
+                let members = JSON.parse(localStorage.getItem('kirwaMembers')) || [];
+                members.splice(index, 1);
+                localStorage.setItem('kirwaMembers', JSON.stringify(members));
+                loadMembers();
+            }
+        }
+
+        // Load members on page load
+        document.addEventListener('DOMContentLoaded', loadMembers);
+    </script>
+</body>
+</html>
